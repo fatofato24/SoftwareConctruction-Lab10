@@ -1,0 +1,35 @@
+# Java compiled class files
+*.class
+
+# Logs
+*.log
+
+# Eclipse
+/.classpath
+/.project
+/.settings/
+
+# IntelliJ IDEA
+/.idea/
+/out/
+/*.iml
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Maven
+/target/
+
+# Gradle
+/.gradle/
+build/
+
+# Ignore all except src and test folders
+*
+!src/
+!test/
+!README.md
+!*.gitignore

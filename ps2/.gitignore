@@ -1,35 +1,34 @@
-# Java compiled class files
+# Ignore all files by default
+*
+
+# Allow source and test files
+!src/
+!src/**/
+!src/**/*.java
+!test/
+!test/**/
+!test/**/*.java
+
+# Allow README and gitignore itself
+!README.md
+!.gitignore
+
+# Ignore compiled Java classes
 *.class
 
-# Logs
-*.log
-
-# Eclipse
+# Ignore Eclipse/IntelliJ project files
 /.classpath
 /.project
 /.settings/
-
-# IntelliJ IDEA
 /.idea/
 /out/
 /*.iml
 
-# Mac OS
+# Ignore OS files
 .DS_Store
-
-# Windows
 Thumbs.db
 
-# Maven
-/target/
-
-# Gradle
-/.gradle/
+# Ignore build folders (if using Gradle/Maven)
 build/
-
-# Ignore all except src and test folders
-*
-!src/
-!test/
-!README.md
-!*.gitignore
+target/
+.gradle/
