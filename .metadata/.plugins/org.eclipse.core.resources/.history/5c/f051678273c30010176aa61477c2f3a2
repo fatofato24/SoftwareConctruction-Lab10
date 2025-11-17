@@ -1,0 +1,70 @@
+package graph;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * An implementation of Graph.
+ *
+ * <p>PS2 instructions: you MUST use the provided rep.
+ */
+public class ConcreteEdgesGraph implements Graph<String> {
+
+    private final Set<String> vertices = new HashSet<>();
+    private final List<Edge> edges = new ArrayList<>();
+
+    // Abstraction function, rep invariant, etc.
+    // TODO: fill these
+
+    @Override
+    public boolean add(String vertex) { throw new RuntimeException("not implemented"); }
+
+    @Override
+    public int set(String source, String target, int weight) { throw new RuntimeException("not implemented"); }
+
+    @Override
+    public boolean remove(String vertex) { throw new RuntimeException("not implemented"); }
+
+    @Override
+    public Set<String> vertices() { throw new RuntimeException("not implemented"); }
+
+    @Override
+    public Map<String, Integer> sources(String target) { throw new RuntimeException("not implemented"); }
+
+    @Override
+    public Map<String, Integer> targets(String source) { throw new RuntimeException("not implemented"); }
+
+    @Override
+    public String toString() { throw new RuntimeException("not implemented"); }
+
+    // ===== Make Edge PUBLIC and STATIC so test can access =====
+    public static class Edge {
+        private final String source;
+        private final String target;
+        private final int weight;
+
+        public Edge(String source, String target, int weight) {
+            if (source == null || target == null || weight < 0)
+                throw new IllegalArgumentException("Invalid Edge arguments");
+            this.source = source;
+            this.target = target;
+            this.weight = weight;
+        }
+
+        public String getSource() { return source; }
+
+        public String getTarget() { return target; }
+
+        public int getWeight() { return weight; }
+
+        @Override
+        public String toString() {
+            return source + " -> " + target + " (" + weight + ")";
+        }
+    }
+}
+

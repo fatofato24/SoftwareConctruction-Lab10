@@ -1,0 +1,182 @@
+package graph;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * An implementation of Graph.
+ *
+ * <p>PS2 instructions: you MUST use the provided rep.
+ */
+public class ConcreteEdgesGraph implements Graph<String> {
+
+    private final Set<String> vertices = new HashSet<>();
+    private final List<Edge> edges = new ArrayList<>();
+
+    // Abstraction function:
+    //   vertices represents all nodes in the graph
+    //   edges represents all directed edges (source → target) with non-negative weights
+    //
+    // Representation invariant:
+    //   - No null vertices
+    //   - No null edges
+    //   - Edge weight > 0
+    //   - For every edge (u → v), both u and v must exist in vertices set
+    //
+    // Safety from rep exposure:
+    //   - Return defensive copies of collections
+    //   - Edge class is immutable
+
+    private void checkRep() {
+        for (String v : vertices) {
+            assert v != null;
+        }
+        for (Edge e : edges) {
+            assert e != null;
+            assert vertices.contains(e.getSource());
+            assert vertices.contains(e.getTarget());
+            assert e.getWeight() > 0;
+        }
+    }
+
+    @Override
+    public boolean add(String vertex) {
+        boolean added = vertices.add(vertex);
+        checkRep();
+        return added;
+    }
+
+    @Override
+    public int set(String source, String target, int weight) {
+        if (!vertices.contains(source)) vertices.add(source);
+        if (!vertices.contains(target)) vertices.add(target);
+
+        int previousWeight = 0;
+
+        // Remove existing edge if present
+        for (int i = 0; i < edges.size(); i++) {
+            Edge e = edges.get(i);
+            if (e.getSource().equals(source) && e.getTarget().equals(target)) {
+                previousWeight = e.getWeight();
+                edges.remove(i);
+                break;
+            }
+        }
+
+        // If weight is zero → delete edge
+        if (weight == 0) {
+            checkRep();
+            return previousWeight;
+        }
+
+        // Otherwise add new edge
+        edges.add(new Edge(source, target, weight));
+        checkRep();
+        return previousWeight;
+    }
+
+    @Override
+    public boolean remove(String vertex) {
+        if (!vertices.contains(vertex)) return false;
+
+        vertices.remove(vertex);
+
+        edges.removeIf(e ->
+                e.getSource().equals(vertex) || e.getTarget().equals(vertex)
+        );
+
+        checkRep();
+        return true;
+    }
+
+    @Override
+    public Set<String> vertices() {
+        return new HashSet<>(vertices); // defensive copy
+    }
+
+    @Override
+    public Map<String, Integer> sources(String target) {
+        Map<String, Integer> map = new HashMap<>();
+        for (Edge e : edges) {
+            if (e.getTarget().equals(target)) {
+                map.put(e.getSource(), e.getWeight());
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, Integer> targets(String source) {
+        Map<String, Integer> map = new HashMap<>();
+        for (Edge e : edges) {
+            if (e.getSource().equals(source)) {
+                map.put(e.getTarget(), e.getWeight());
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Vertices: " + vertices + "\nEdges:\n");
+        for (Edge e : edges) {
+            sb.append(e.toString()).append("\n");
+        }
+        return sb.toString();
+    }
+}
+
+/**
+ * Immutable Edge class.
+ */
+class Edge {
+
+    private final String source;
+    private final String target;
+    private final int weight;
+
+    // Abstraction function:
+    //   Represents a directed edge source → target with positive weight
+    //
+    // Representation invariant:
+    //   weight > 0
+    //   source != null, target != null
+    //
+    // Safety from rep exposure:
+    //   All fields are private & final
+    //   No setters
+
+    public Edge(String source, String target, int weight) {
+        this.source = source;
+        this.target = target;
+        this.weight = weight;
+        checkRep();
+    }
+
+    private void checkRep() {
+        assert source != null;
+        assert target != null;
+        assert weight > 0;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    @Override
+    public String toString() {
+        return source + " -> " + target + " = " + weight;
+    }
+}
